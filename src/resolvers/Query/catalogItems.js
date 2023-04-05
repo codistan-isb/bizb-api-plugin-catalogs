@@ -4,6 +4,7 @@ import getPaginatedResponse from "@reactioncommerce/api-utils/graphql/getPaginat
 import wasFieldRequested from "@reactioncommerce/api-utils/graphql/wasFieldRequested.js";
 import { decodeShopOpaqueId, decodeTagOpaqueId } from "../../xforms/id.js";
 import xformCatalogBooleanFilters from "../../utils/catalogBooleanFilters.js";
+import xformCatalogSimpleFilters from "../../utils/catalogSimpleFilters.js";
 
 /**
  * @name Query/catalogItems
@@ -16,12 +17,13 @@ import xformCatalogBooleanFilters from "../../utils/catalogBooleanFilters.js";
  * @param {String[]} [args.shopIds] - limit to catalog items for these shops
  * @param {String[]} [args.tagIds] - limit to catalog items with this array of tags
  * @param {Object[]} [args.booleanFilters] - Array of boolean filter objects with `name` and `value`
+ *  * @param {Object[]} [args.simpleFilters] - Array of simple filter objects with `size`, `color`, `minprice`, `maxprice`
  * @param {Object} context - an object containing the per-request state
  * @param {Object} info Info about the GraphQL request
  * @returns {Promise<Object>} A CatalogItemConnection object
  */
 export default async function catalogItems(_, args, context, info) {
-  const { shopIds: opaqueShopIds, tagIds: opaqueTagIds, booleanFilters, searchQuery, ...connectionArgs } = args;
+  const { shopIds: opaqueShopIds, tagIds: opaqueTagIds, booleanFilters, simpleFilters, searchQuery, ...connectionArgs } = args;
 
   const shopIds = opaqueShopIds && opaqueShopIds.map(decodeShopOpaqueId);
   const tagIds = opaqueTagIds && opaqueTagIds.map(decodeTagOpaqueId);
@@ -31,6 +33,10 @@ export default async function catalogItems(_, args, context, info) {
     catalogBooleanFilters = await xformCatalogBooleanFilters(context, booleanFilters);
   }
 
+  let catalogSimpleFilters = {};
+  if (Array.isArray(simpleFilters) && simpleFilters.length) {
+    catalogSimpleFilters = await xformCatalogSimpleFilters(context, simpleFilters);
+  }
   if (connectionArgs.sortBy === "featured") {
     if (!tagIds || tagIds.length === 0) {
       throw new ReactionError("not-found", "A tag ID is required for featured sort");
@@ -41,6 +47,7 @@ export default async function catalogItems(_, args, context, info) {
     const tagId = tagIds[0];
     return context.queries.catalogItemsAggregate(context, {
       catalogBooleanFilters,
+      catalogSimpleFilters,
       connectionArgs,
       searchQuery,
       shopIds,
@@ -71,6 +78,7 @@ export default async function catalogItems(_, args, context, info) {
 
   const query = await context.queries.catalogItems(context, {
     catalogBooleanFilters,
+    catalogSimpleFilters,
     searchQuery,
     shopIds,
     tagIds

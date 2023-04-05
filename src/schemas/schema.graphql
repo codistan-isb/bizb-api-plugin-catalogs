@@ -36,8 +36,10 @@ enum simpleCatalogFilterNames {
   size
   "Product Color"
   color
-  "Product Price"
-  price
+  "Product Min Price"
+  minprice
+  "Product Max Price"
+  maxprice
 }
 
 input simpleCatalogFilter {
