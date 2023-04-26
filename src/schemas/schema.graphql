@@ -445,6 +445,7 @@ extend type Query {
     booleanFilters: [CatalogBooleanFilter]
 
     simpleFilters: [simpleCatalogFilter]
+    
     "Optional text search query"
     searchQuery: String
 
