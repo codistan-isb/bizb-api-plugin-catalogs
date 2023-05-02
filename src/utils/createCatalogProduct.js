@@ -24,6 +24,7 @@ export function xformVariant(variant, variantMedia) {
     metafields: variant.metafields,
     minOrderQuantity: variant.minOrderQuantity,
     optionTitle: variant.optionTitle,
+    size: variant.size,
     originCountry: variant.originCountry,
     primaryImage,
     shopId: variant.shopId,

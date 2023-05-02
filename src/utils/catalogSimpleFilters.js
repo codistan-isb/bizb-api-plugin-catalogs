@@ -24,18 +24,20 @@ export default async function xformCatalogSimpleFilters(context, simpleFilters) 
         }
     }
 
-    // Provide the opportunity for other plugins to add boolean filters
+    // Provide the opportunity for other plugins to add simple filters
     for (const func of context.getFunctionsOfType("xformCatalogSimpleFilters")) {
         const additionalMongoFilters = await func(context, simpleFilters); // eslint-disable-line no-await-in-loop
         if (additionalMongoFilters) {
             // Merge all filters
             Array.prototype.push.apply(mongoFilters, additionalMongoFilters);
         }
+        // console.log("additional Mongo Filters ", additionalMongoFilters)
     }
+    // console.log(additionalMongoFilters)
 
     if (mongoFilters.length === 0) return {};
-
+    // console.log("mongo Filters ", mongoFilters)
     return {
-        $and: mongoFilters
+        $or: mongoFilters
     };
 }

@@ -18,22 +18,25 @@ import arrayJoinPlusRemainingQuery from "@reactioncommerce/api-utils/arrayJoinPl
 export default async function catalogItemsAggregate(context, {
   connectionArgs,
   catalogBooleanFilters,
+  catalogSimpleFilters,
   searchQuery,
   shopIds,
   tagId
 } = {}) {
   const { collections } = context;
   const { Catalog, Tags } = collections;
-
+  // console.log("Simple ", catalogSimpleFilters)
+  // console.log("Boolean ", catalogBooleanFilters)
   if (!tagId) throw new ReactionError("invalid-param", "You must provide a tagId");
 
   const selector = {
     "product.tagIds": tagId,
     "product.isDeleted": { $ne: true },
     "product.isVisible": true,
-    ...catalogBooleanFilters
+    ...catalogBooleanFilters,
+    ...catalogSimpleFilters
   };
-
+  // console.log("Selector", selector)
   if (shopIds && shopIds.length > 0) {
     selector.shopId = { $in: shopIds };
   }

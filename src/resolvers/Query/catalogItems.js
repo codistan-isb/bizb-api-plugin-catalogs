@@ -32,11 +32,12 @@ export default async function catalogItems(_, args, context, info) {
   if (Array.isArray(booleanFilters) && booleanFilters.length) {
     catalogBooleanFilters = await xformCatalogBooleanFilters(context, booleanFilters);
   }
-
+  // console.log("catalogBooleanFilters ", catalogBooleanFilters)
   let catalogSimpleFilters = {};
   if (Array.isArray(simpleFilters) && simpleFilters.length) {
     catalogSimpleFilters = await xformCatalogSimpleFilters(context, simpleFilters);
   }
+  // console.log("catalogSimpleFilters ", catalogSimpleFilters)
   if (connectionArgs.sortBy === "featured") {
     if (!tagIds || tagIds.length === 0) {
       throw new ReactionError("not-found", "A tag ID is required for featured sort");
@@ -45,6 +46,7 @@ export default async function catalogItems(_, args, context, info) {
       throw new ReactionError("invalid-parameter", "Multiple tags cannot be sorted by featured. Only the first tag will be returned.");
     }
     const tagId = tagIds[0];
+
     return context.queries.catalogItemsAggregate(context, {
       catalogBooleanFilters,
       catalogSimpleFilters,
@@ -83,7 +85,11 @@ export default async function catalogItems(_, args, context, info) {
     shopIds,
     tagIds
   });
-
+  // console.log("query ", await getPaginatedResponse(query, connectionArgs, {
+  //   includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
+  //   includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),
+  //   includeTotalCount: wasFieldRequested("totalCount", info)
+  // }))
   return getPaginatedResponse(query, connectionArgs, {
     includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
     includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),

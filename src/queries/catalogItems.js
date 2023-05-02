@@ -13,28 +13,41 @@ import ReactionError from "@reactioncommerce/reaction-error";
  * @param {String[]} [params.tags] - Tag IDs to include (OR)
  * @returns {Promise<MongoCursor>} - A MongoDB cursor for the proper query
  */
-export default async function catalogItems(context, { searchQuery, shopIds, tagIds, catalogBooleanFilters } = {}) {
+export default async function catalogItems(
+  context,
+  {
+    searchQuery,
+    shopIds,
+    tagIds,
+    catalogBooleanFilters,
+    catalogSimpleFilters,
+  } = {}
+) {
   const { collections } = context;
   const { Catalog } = collections;
 
   if ((!shopIds || shopIds.length === 0) && (!tagIds || tagIds.length === 0)) {
-    throw new ReactionError("invalid-param", "You must provide tagIds or shopIds or both");
+    throw new ReactionError(
+      "invalid-param",
+      "You must provide tagIds or shopIds or both"
+    );
   }
-
+  // console.log(catalogSimpleFilters);
   const query = {
     "product.isDeleted": { $ne: true },
     ...catalogBooleanFilters,
-    "product.isVisible": true
+    ...catalogSimpleFilters,
+    "product.isVisible": true,
   };
-
+  // console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
 
   if (searchQuery) {
     query.$text = {
-      $search: _.escapeRegExp(searchQuery)
+      $search: _.escapeRegExp(searchQuery),
     };
   }
-
+  // console.log("Catalog ", Catalog.find(query))
   return Catalog.find(query);
 }
