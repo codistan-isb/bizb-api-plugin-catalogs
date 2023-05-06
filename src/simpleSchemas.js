@@ -67,6 +67,10 @@ export const ShippingParcel = new SimpleSchema({
     type: Number,
     optional: true
   },
+  size: {
+    type: String,
+    optional: true
+  },
   weight: {
     type: Number,
     optional: true
@@ -205,6 +209,11 @@ export const CatalogProductOption = new SimpleSchema({
     min: 0,
     optional: true,
     defaultValue: 0
+  },
+  "size": {
+    type: String,
+    label: "Size",
+    optional: true
   },
   "index": {
     type: SimpleSchema.Integer,
@@ -443,6 +452,11 @@ export const CatalogProduct = new SimpleSchema({
   "productType": {
     type: String,
     label: "Product type",
+    optional: true
+  },
+  "size": {
+    type: String,
+    label: "Size",
     optional: true
   },
   "shopId": {

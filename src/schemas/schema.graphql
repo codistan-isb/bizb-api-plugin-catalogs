@@ -100,6 +100,8 @@ interface CatalogProductOrVariant {
 
   "The width of the product, if it has physical dimensions"
   width: Float
+
+  size: String
 }
 
 """
@@ -274,6 +276,8 @@ type CatalogProductVariant implements CatalogProductOrVariant & Node {
 
   "The width of the product, if it has physical dimensions"
   width: Float
+
+  size: String
 }
 
 """
@@ -445,7 +449,7 @@ extend type Query {
     booleanFilters: [CatalogBooleanFilter]
 
     simpleFilters: [simpleCatalogFilter]
-    
+
     "Optional text search query"
     searchQuery: String
 
