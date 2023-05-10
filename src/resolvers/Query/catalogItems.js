@@ -23,8 +23,14 @@ import xformCatalogSimpleFilters from "../../utils/catalogSimpleFilters.js";
  * @returns {Promise<Object>} A CatalogItemConnection object
  */
 export default async function catalogItems(_, args, context, info) {
-  const { shopIds: opaqueShopIds, tagIds: opaqueTagIds, booleanFilters, simpleFilters, searchQuery, ...connectionArgs } = args;
-
+  const { shopIds: opaqueShopIds, tagIds: opaqueTagIds, booleanFilters, simpleFilters, priceRange, searchQuery, ...connectionArgs } = args;
+  // console.log("priceRange ", simpleFilters);
+  // if (simpleFilters[0].name === 'minPrice' && simpleFilters[1].name === 'maxPrice') {
+  //   MinPrice = simpleFilters[0].value;
+  //   MaxPrice = simpleFilters[1].value;
+  // }
+  // console.log("Min Price: ", MinPrice);
+  // console.log("Max Price: ", MaxPrice);
   const shopIds = opaqueShopIds && opaqueShopIds.map(decodeShopOpaqueId);
   const tagIds = opaqueTagIds && opaqueTagIds.map(decodeTagOpaqueId);
 
@@ -37,6 +43,7 @@ export default async function catalogItems(_, args, context, info) {
   if (Array.isArray(simpleFilters) && simpleFilters.length) {
     catalogSimpleFilters = await xformCatalogSimpleFilters(context, simpleFilters);
   }
+  // console.log("connectionArgs ", connectionArgs)
   // console.log("catalogSimpleFilters ", catalogSimpleFilters)
   if (connectionArgs.sortBy === "featured") {
     if (!tagIds || tagIds.length === 0) {
@@ -52,6 +59,7 @@ export default async function catalogItems(_, args, context, info) {
       catalogSimpleFilters,
       connectionArgs,
       searchQuery,
+      priceRange,
       shopIds,
       tagId
     });
@@ -66,6 +74,7 @@ export default async function catalogItems(_, args, context, info) {
     // first value returned that is a string.
     for (const func of context.getFunctionsOfType("getMinPriceSortByFieldPath")) {
       realSortByField = await func(context, { connectionArgs }); // eslint-disable-line no-await-in-loop
+      // console.log("realSortByField ", realSortByField)
       if (typeof realSortByField === "string") break;
     }
 
@@ -82,9 +91,11 @@ export default async function catalogItems(_, args, context, info) {
     catalogBooleanFilters,
     catalogSimpleFilters,
     searchQuery,
+    priceRange,
     shopIds,
     tagIds
   });
+  // console.log("query ", query)
   // console.log("query ", await getPaginatedResponse(query, connectionArgs, {
   //   includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
   //   includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),

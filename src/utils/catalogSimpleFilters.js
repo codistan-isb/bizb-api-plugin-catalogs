@@ -1,4 +1,4 @@
-const CATALOG_PLUGIN_SIMPLE_FILTERS = ["size", "color", "minprice", "maxprice"];
+const CATALOG_PLUGIN_SIMPLE_FILTERS = ["size", "color", "minPrice", "maxPrice"];
 
 /**
  *
@@ -11,19 +11,19 @@ const CATALOG_PLUGIN_SIMPLE_FILTERS = ["size", "color", "minprice", "maxprice"];
  */
 export default async function xformCatalogSimpleFilters(context, simpleFilters) {
     const mongoFilters = [];
-
+    // console.log("Simple Filter for mongo ", simpleFilters)
     // Catalog plugin's filters, if any
     for (const filter of simpleFilters) {
         if (CATALOG_PLUGIN_SIMPLE_FILTERS.includes(filter.name)) {
+            // console.log("Filter Name ", filter.name)
             let { value } = filter;
             // Ensure that documents where the filter field is
             // not set are also returned.
             if (value === false) value = { $ne: true };
-
             mongoFilters.push({ [`product.${filter.name}`]: value });
         }
     }
-
+    // console.log("mongoFilters ", mongoFilters)
     // Provide the opportunity for other plugins to add simple filters
     for (const func of context.getFunctionsOfType("xformCatalogSimpleFilters")) {
         const additionalMongoFilters = await func(context, simpleFilters); // eslint-disable-line no-await-in-loop

@@ -30,16 +30,21 @@ input CatalogBooleanFilter {
   "The filter value"
   value: Boolean!
 }
-
+enum priceRangeValueName {
+  "Product Min Price"
+  minPrice
+  "Product Max Price"
+  maxPrice
+}
 enum simpleCatalogFilterNames {
   "Product Size"
   size
   "Product Color"
   color
-  "Product Min Price"
-  minprice
-  "Product Max Price"
-  maxprice
+}
+input priceRangeValue {
+  name: priceRangeValueName!
+  value: Float!
 }
 
 input simpleCatalogFilter {
@@ -452,6 +457,9 @@ extend type Query {
 
     "Optional text search query"
     searchQuery: String
+
+    "Price Range Filter"
+    priceRange: [priceRangeValue]
 
     "Return only results that come after this cursor. Use this with `first` to specify the number of results to return."
     after: ConnectionCursor
