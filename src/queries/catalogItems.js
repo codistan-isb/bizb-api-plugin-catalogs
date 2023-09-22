@@ -45,9 +45,13 @@ export default async function catalogItems(
     },
     "product.pricing.USD.maxPrice": {
       $ne: null
-    }
+    },
+    "product.media": {
+      $elemMatch: {
+        "URLs": { $exists: true, $ne: null, $ne: "" },
+      },},
   };
-  // console.log("Query: ", query);
+  console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
 
@@ -74,5 +78,6 @@ export default async function catalogItems(
   // console.log("Updated Query ", query)
   // const valueinter = await Catalog.find(query)
   // console.log("Catalog ", valueinter)
+
   return Catalog.find(query);
 }
