@@ -440,6 +440,14 @@ type VendorConnection {
   "The total number of nodes that match your query"
   totalCount: Int!
 }
+type Store implements Node {
+  _id: ID!
+  name: String
+}
+type Brand implements Node {
+  _id: ID!
+  name: String
+}
 
 extend type Query {
   "Gets items from a shop catalog"
@@ -524,6 +532,8 @@ extend type Query {
     "Return results sorted in this order"
     sortOrder: SortOrder = asc
   ): VendorConnection
+   stores: [String]
+    brands: [String]
 }
 
 extend type Mutation {
