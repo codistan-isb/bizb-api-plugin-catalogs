@@ -41,15 +41,16 @@ export default async function catalogItems(
     ...catalogSimpleFilters,
     "product.isVisible": true,
     "product.pricing.USD.minPrice": {
-      $ne: null
+      $ne: null,
     },
     "product.pricing.USD.maxPrice": {
-      $ne: null
+      $ne: null,
     },
     "product.media": {
       $elemMatch: {
-        "URLs": { $exists: true, $ne: null, $ne: "" },
-      },},
+        URLs: { $exists: true, $ne: null, $ne: "", $ne: {} },
+      },
+    },
   };
   console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
@@ -61,9 +62,8 @@ export default async function catalogItems(
     };
   }
   if (priceRange) {
-
-    const minPrice = priceRange.find(item => item.name === "minPrice").value;
-    const maxPrice = priceRange.find(item => item.name === "maxPrice").value;
+    const minPrice = priceRange.find((item) => item.name === "minPrice").value;
+    const maxPrice = priceRange.find((item) => item.name === "maxPrice").value;
     // const searchQuery1 = `${minPrice} ${maxPrice}`;
 
     query[`product.pricing.USD.minPrice`] = { $gte: parseFloat(minPrice) };
