@@ -1,7 +1,7 @@
 {
   "name": "@codistan-isb/bizb-api-plugin-catalogs",
   "description": "Catalogs plugin for the Reaction API",
-  "version": "3.0.7-development",
+  "version": "3.0.8-development",
   "main": "index.js",
   "type": "module",
   "engines": {

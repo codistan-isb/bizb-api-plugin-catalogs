@@ -35,6 +35,23 @@ export default async function catalogItems(
     );
   }
   // console.log(catalogSimpleFilters);
+  // const query = {
+  //   "product.isDeleted": { $ne: true },
+  //   ...catalogBooleanFilters,
+  //   ...catalogSimpleFilters,
+  //   "product.isVisible": true,
+  //   "product.pricing.USD.minPrice": {
+  //     $ne: null,
+  //   },
+  //   "product.pricing.USD.maxPrice": {
+  //     $ne: null,
+  //   },
+  //   "product.media": {
+  //     $elemMatch: {
+  //       URLs: { $exists: true, $ne: null, $ne: "", $ne: {} },
+  //     },
+  //   },
+  // };
   const query = {
     "product.isDeleted": { $ne: true },
     ...catalogBooleanFilters,
@@ -51,8 +68,32 @@ export default async function catalogItems(
         URLs: { $exists: true, $ne: null, $ne: "", $ne: {} },
       },
     },
+    $and: [
+      {
+        "product.media.URLs.large": {
+          $not: { $regex: /public\/bizb-\d+\/\/.*/ },
+        },
+      },
+      {
+        "product.media.URLs.medium": {
+          $not: { $regex: /public\/bizb-\d+\/\/.*/ },
+        },
+      },
+      {
+        "product.media.URLs.small": {
+          $not: { $regex: /public\/bizb-\d+\/\/.*/ },
+        },
+      },
+      {
+        "product.media.URLs.original": {
+          $not: { $regex: /public\/bizb-\d+\/\/.*/ },
+        },
+      },
+    ],
   };
-  console.log("Query: ", query);
+
+  // cmVhY3Rpb24vY2F0YWxvZ0l0ZW06V3FHazJwQTR6SkNFejdLcFM=
+  // console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
 
@@ -75,9 +116,9 @@ export default async function catalogItems(
     //   $search: _.escapeRegExp(searchQuery1),
     // };
   }
-  // console.log("Updated Query ", query)
-  // const valueinter = await Catalog.find(query)
-  // console.log("Catalog ", valueinter)
+  // console.log("Updated Query ", query);
+  // const valueInter = await Catalog.find(query).toArray();
+  // console.log("Catalog ", valueInter);
 
   return Catalog.find(query);
 }
