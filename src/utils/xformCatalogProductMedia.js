@@ -8,8 +8,8 @@ function ensureAbsoluteUrls(context, mediaItem) {
   if (!mediaItem || !mediaItem.URLs) return mediaItem;
 
   const URLs = {};
-  Object.keys(mediaItem.URLs).forEach((name) => {
-    URLs[name] = context.getAbsoluteUrl(mediaItem.URLs[name]);
+  Object.keys(mediaItem?.URLs).forEach((name) => {
+    URLs[name] = context.getAbsoluteUrl(mediaItem?.URLs[name]);
   });
 
   return { ...mediaItem, URLs };
