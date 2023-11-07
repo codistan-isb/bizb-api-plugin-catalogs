@@ -207,6 +207,9 @@ type CatalogProduct implements CatalogProductOrVariant & Node {
 
   "The width of the product, if it has physical dimensions"
   width: Float
+
+  # same day delivery resolver
+  sameDayDelivery: Boolean
 }
 
 "A variant of a catalog product"
@@ -487,6 +490,7 @@ extend type Query {
     "Return results sorted in this order"
     sortOrder: SortOrder = desc
 
+    size: String
     "Provide a Currency code if sortBy is minPrice"
     sortByPriceCurrencyCode: String
 
@@ -532,8 +536,8 @@ extend type Query {
     "Return results sorted in this order"
     sortOrder: SortOrder = asc
   ): VendorConnection
-   stores: [String]
-    brands: [String]
+  stores: [String]
+  brands: [String]
 }
 
 extend type Mutation {
