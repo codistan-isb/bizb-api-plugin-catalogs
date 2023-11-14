@@ -1,6 +1,6 @@
 import Logger from "@reactioncommerce/logger";
 import hashProduct from "./mutations/hashProduct.js";
-
+import sellerAccountUpdation from './utils/sellerAccountUpdation.js'
 /**
  * @summary Called on startup
  * @param {Object} context Startup context
@@ -54,7 +54,15 @@ export default async function catalogStartup(context) {
       });
     }
   };
+  const sellerAccountUpdateHandler = async ({ productId, product }) => {
+    // console.log("productId: ", productId);
+    // console.log("product: ", product);
+    if (productId) {
+      sellerAccountUpdation(productId, product, collections)
+    }
+  };
 
   appEvents.on("afterProductUpdate", productOrVariantUpdateHandler);
+  appEvents.on("afterProductUpdate", sellerAccountUpdateHandler);
   appEvents.on("afterVariantUpdate", productOrVariantUpdateHandler);
 }
