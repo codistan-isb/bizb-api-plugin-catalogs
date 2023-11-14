@@ -452,6 +452,31 @@ type Brand implements Node {
   name: String
 }
 
+enum GlobalStoreTypeEnum {
+  product
+  store
+}
+
+type GlobalStoreData {
+  _id: ID
+  name: String
+  storeName: String
+  image: String
+}
+
+type GlobalCatalogData {
+  _id: ID
+  title: String
+  description: String
+  media: ImageInfo
+  variant: [CatalogProductVariant]
+}
+
+type GlobalSearchPayload {
+  storeData: [GlobalStoreData]
+  catalog: [GlobalCatalogData]
+}
+
 extend type Query {
   "Gets items from a shop catalog"
   catalogItems(
@@ -538,6 +563,13 @@ extend type Query {
   ): VendorConnection
   stores: [String]
   brands: [String]
+
+  globalSearch(
+    searchType: GlobalStoreTypeEnum
+    searchQuery: String!
+    skip: Int!
+    limit: Int = 20
+  ): GlobalSearchPayload
 }
 
 extend type Mutation {
