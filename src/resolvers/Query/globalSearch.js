@@ -15,8 +15,8 @@ export default async function globalSearch(_, args, context, info) {
     { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } }, // Include the score
     {
       $project: {
-        _id: "$doc._id",
-        slug: "$doc.slug",
+        _id: "$doc.product._id",
+        slug: "$doc.product.slug",
         title: "$doc.product.title",
         description: "$doc.product.description",
         media: "$doc.product.media",

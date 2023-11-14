@@ -467,6 +467,7 @@ type GlobalStoreData {
 type GlobalCatalogData {
   _id: ID
   title: String
+  slug: String
   description: String
   media: ImageInfo
   variant: [CatalogProductVariant]
