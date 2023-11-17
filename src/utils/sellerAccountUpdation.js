@@ -8,7 +8,7 @@ export default async function sellerAccountUpdation(productId, product, collecti
         // console.log("catalogProduct :- ", catalogProduct);
         // console.log("catalogProduct?.product?.tagIds :- ", catalogProduct?.product?.tagIds);
         // console.log("Product seller ID :- ", product?.sellerId);
-        let accountDetails = await await collections.Accounts.findOne({
+        let accountDetails = await collections.Accounts.findOne({
             "_id": product?.sellerId
         });
         let updateNeeded = false;

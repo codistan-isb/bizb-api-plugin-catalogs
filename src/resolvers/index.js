@@ -6,7 +6,7 @@ import CatalogProductVariant from "./CatalogProductVariant/index.js";
 import ImageInfo from "./ImageInfo.js";
 import Mutation from "./Mutation/index.js";
 import Query from "./Query/index.js";
-
+import GlobalCatalogData from "./GlobalCatalogData/_id.js"
 /**
  * Catalog-related GraphQL resolvers
  * @namespace Catalog/GraphQL
@@ -22,6 +22,7 @@ export default {
   CatalogItemContent: {
     _id: (item) => encodeCatalogItemOpaqueId(item._id)
   },
+  GlobalCatalogData,
   CatalogItemProduct,
   CatalogProduct,
   CatalogProductVariant,
