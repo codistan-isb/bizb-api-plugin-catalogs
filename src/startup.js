@@ -61,6 +61,29 @@ export default async function catalogStartup(context) {
       sellerAccountUpdation(productId, product, collections)
     }
   };
+  appEvents.on("viewInsights", async (  {context,payload} ) => {
+    const { collections } = context;
+    const { Catalog } = collections;
+    console.log("payload: ", payload);
+    
+    const { productId } = payload;
+  
+    const product = await Catalog.findOne(payload);
+    
+    if (product) {
+      // Increment view count
+      const updatedViewCount = (product.viewCount || 0) + 1;
+  
+      // Update the product document with the incremented view count
+    const updateProduct  =   await Catalog.updateOne(
+        { _id: product._id }, // Using _id to uniquely identify the product
+        { $inc: { "product.viewCount": updatedViewCount } }
+      );
+      console.log("update: ", updateProduct);
+    }
+  
+  });
+  
 
   appEvents.on("afterProductUpdate", productOrVariantUpdateHandler);
   appEvents.on("afterProductUpdate", sellerAccountUpdateHandler);

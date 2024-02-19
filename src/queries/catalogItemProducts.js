@@ -12,8 +12,8 @@ import ReactionError from "@reactioncommerce/reaction-error";
  * @param {String} [param.shopId] - ID of shop that owns the product
  * @returns {Object} - A Product from the Catalog
  */
-export default async function catalogItemProduct(context, { catalogIdOrProductSlug, shopId } = {}) {
-  const { collections } = context;
+export default async function catalogItemProducts(context, { catalogIdOrProductSlug, shopId } = {}) {
+  const { appEvents,collections } = context;
   const { Catalog } = collections;
 
   if (!catalogIdOrProductSlug) {
@@ -32,10 +32,23 @@ export default async function catalogItemProduct(context, { catalogIdOrProductSl
       }
     ]
   };
+  console.log("query: ", query);
 
   if (shopId) {
     query.shopId = shopId;
-  }
 
+  }
+  const payload = {
+    "$or": [
+      {
+        _id: catalogIdOrProductSlug
+      },
+      {
+        "product.slug": catalogIdOrProductSlug
+      }
+    ]
+  }
+  console.log("payload: ", payload);
+ await appEvents.emit("viewInsights",  {payload,context} );
   return Catalog.findOne(query);
 }
