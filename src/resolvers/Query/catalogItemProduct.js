@@ -21,9 +21,12 @@ export default async function catalogItemProduct(_, args, context) {
   if (opaqueShopId) {
     shopId = decodeShopOpaqueId(opaqueShopId);
   }
-
-  return context.queries.catalogItemProduct(context, {
+console.log("catalogIdOrProductSlug: ", catalogIdOrProductSlug);
+  const cataLogItem = await context.queries.catalogItemProducts(context, {
     catalogIdOrProductSlug,
     shopId
   });
+  console.log("cataLogItem: ", cataLogItem);
+  return cataLogItem;
 }
+ 
