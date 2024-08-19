@@ -8,7 +8,6 @@ export default async function stores(parent, args, ctx, info) {
       
         const extractedStoreNames = storeNames.map(store => store.storeName);
 
-        console.log("extractedStoreNames ", extractedStoreNames);
 
         return extractedStoreNames;
 

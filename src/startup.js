@@ -55,8 +55,6 @@ export default async function catalogStartup(context) {
     }
   };
   const sellerAccountUpdateHandler = async ({ productId, product }) => {
-    // console.log("productId: ", productId);
-    // console.log("product: ", product);
     if (productId) {
       sellerAccountUpdation(productId, product, collections)
     }
@@ -64,7 +62,6 @@ export default async function catalogStartup(context) {
   appEvents.on("viewInsights", async (  {context,payload} ) => {
     const { collections } = context;
     const { Catalog } = collections;
-    console.log("payload: ", payload);
     
     const { productId } = payload;
   
@@ -79,7 +76,6 @@ export default async function catalogStartup(context) {
         { _id: product._id }, // Using _id to uniquely identify the product
         { $inc: { "product.viewCount": updatedViewCount } }
       );
-      console.log("update: ", updateProduct);
     }
   
   });

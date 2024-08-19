@@ -24,7 +24,6 @@ export default async function catalogItems(
     catalogSimpleFilters,
   } = {}
 ) {
-  // console.log("priceRange: ", priceRange);
   const { collections } = context;
   const { Catalog } = collections;
 
@@ -34,7 +33,6 @@ export default async function catalogItems(
       "You must provide tagIds or shopIds or both"
     );
   }
-  // console.log(catalogSimpleFilters);
   // const query = {
   //   "product.isDeleted": { $ne: true },
   //   ...catalogBooleanFilters,
@@ -92,8 +90,6 @@ export default async function catalogItems(
     ],
   };
 
-  // cmVhY3Rpb24vY2F0YWxvZ0l0ZW06V3FHazJwQTR6SkNFejdLcFM=
-  // console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
   if (tagIds) query["product.tagIds"] = { $in: tagIds };
 
@@ -116,9 +112,7 @@ export default async function catalogItems(
     //   $search: _.escapeRegExp(searchQuery1),
     // };
   }
-  // console.log("Updated Query ", query);
   // const valueInter = await Catalog.find(query).toArray();
-  // console.log("Catalog ", valueInter);
 
   return Catalog.find(query);
 }

@@ -6,7 +6,6 @@ export default {
   _id: (node) => encodeCatalogProductVariantOpaqueId(node?._id),
   media: (node, args, context) => node?.media && node?.media.map((mediaItem) => xformCatalogProductMedia(mediaItem, context)),
   primaryImage: (node, args, context) => {
-    console.log("here");
     return xformCatalogProductMedia(node?.primaryImage, context)
   },
   shop: resolveShopFromShopId,

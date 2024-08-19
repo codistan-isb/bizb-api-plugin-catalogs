@@ -12,6 +12,12 @@ export default async function globalSearch(_, args, context, info) {
         },
       },
     },
+    {
+      "$match": {
+        "product.isDeleted": false,
+        "product.isVisible": true
+      }
+    },
     { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } }, // Include the score
     {
       $project: {
@@ -64,8 +70,6 @@ export default async function globalSearch(_, args, context, info) {
     ]);
   }
 
-  console.log("Catalog search result:", catalog);
-  console.log("Account search result:", storeData);
 
   return { catalog, storeData };
 }

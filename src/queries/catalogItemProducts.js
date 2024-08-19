@@ -32,7 +32,6 @@ export default async function catalogItemProducts(context, { catalogIdOrProductS
       }
     ]
   };
-  console.log("query: ", query);
 
   if (shopId) {
     query.shopId = shopId;
@@ -48,7 +47,6 @@ export default async function catalogItemProducts(context, { catalogIdOrProductS
       }
     ]
   }
-  console.log("payload: ", payload);
  await appEvents.emit("viewInsights",  {payload,context} );
   return Catalog.findOne(query);
 }
