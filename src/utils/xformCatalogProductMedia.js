@@ -26,7 +26,6 @@ function ensureAbsoluteUrls(context, mediaItem) {
  * @returns {Object} Transformed media item
  */
 export default async function xformCatalogProductMedia(mediaItem, context) {
-  console.log("here in media ");
   const xformCatalogProductMediaFuncs = context.getFunctionsOfType("xformCatalogProductMedia");
   for (const func of xformCatalogProductMediaFuncs) {
     const xformedMediaItem = await func(mediaItem, context); // eslint-disable-line no-await-in-loop

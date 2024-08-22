@@ -8,6 +8,7 @@ const CATALOG_PLUGIN_SIMPLE_FILTERS = ["size", "color", "minPrice", "maxPrice"];
  * @param {Object[]} simpleFilters - Array of Boolean filters
  * @returns {Object} Mongo filter expression
  */
+
 export default async function xformCatalogSimpleFilters(
   context,
   simpleFilters

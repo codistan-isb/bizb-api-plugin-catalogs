@@ -8,7 +8,6 @@
  *   can be used as a resolver.
  */
 export default async function xformCatalogProductVariants(context, catalogProductVariants, info = {}) {
-  console.log("here in product");
   const { getFunctionsOfType } = context;
 
   for (const mutateVariants of getFunctionsOfType("xformCatalogProductVariants")) {

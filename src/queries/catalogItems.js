@@ -24,9 +24,8 @@ export default async function catalogItems(
     catalogSimpleFilters,
   } = {}
 ) {
-  // console.log("priceRange: ", priceRange);
   const { collections } = context;
-  const { Catalog } = collections;
+  const { Catalog, Tags } = collections;
 
   if ((!shopIds || shopIds.length === 0) && (!tagIds || tagIds.length === 0)) {
     throw new ReactionError(
@@ -34,7 +33,6 @@ export default async function catalogItems(
       "You must provide tagIds or shopIds or both"
     );
   }
-  // console.log(catalogSimpleFilters);
   // const query = {
   //   "product.isDeleted": { $ne: true },
   //   ...catalogBooleanFilters,
@@ -92,10 +90,15 @@ export default async function catalogItems(
     ],
   };
 
-  // cmVhY3Rpb24vY2F0YWxvZ0l0ZW06V3FHazJwQTR6SkNFejdLcFM=
-  // console.log("Query: ", query);
   if (shopIds) query.shopId = { $in: shopIds };
-  if (tagIds) query["product.tagIds"] = { $in: tagIds };
+  console.log("tags here in catalog", tagIds)
+  if (tagIds) {
+  const tagDocuments = await Tags.find({ slug: { $in: tagIds } }).toArray();
+  const tagIdsSlug = tagDocuments.map(tag => tag._id);
+  console.log("tags here in catalog slug", tagIds, tagIdsSlug, tagDocuments)
+
+  query["product.tagIds"] = { $in: tagIdsSlug };
+  }
 
   if (searchQuery) {
     query.$text = {
@@ -116,9 +119,7 @@ export default async function catalogItems(
     //   $search: _.escapeRegExp(searchQuery1),
     // };
   }
-  // console.log("Updated Query ", query);
   // const valueInter = await Catalog.find(query).toArray();
-  // console.log("Catalog ", valueInter);
 
   return Catalog.find(query);
 }

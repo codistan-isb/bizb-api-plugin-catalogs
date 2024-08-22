@@ -9,9 +9,7 @@ import publishProductToCatalogById from "./publishProductToCatalogById.js";
  * @returns {boolean} true on successful publish for all documents, false if one ore more fail to publish
  */
 export default async function publishProductsToCatalog(productIds, context) {
-  // console.log("Context ", context)
   const promises = productIds.map((product) => publishProductToCatalogById(product, context));
   const results = await Promise.all(promises);
-  // console.log("Product ", results)
   return results.every((result) => result);
 }
