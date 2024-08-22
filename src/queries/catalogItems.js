@@ -91,13 +91,15 @@ export default async function catalogItems(
   };
 
   if (shopIds) query.shopId = { $in: shopIds };
-  console.log("tags here in catalog", tagIds)
+  console.log("tags here in catalog", tagIds);
   if (tagIds) {
-  const tagDocuments = await Tags.find({ slug: { $in: tagIds } }).toArray();
-  const tagIdsSlug = tagDocuments.map(tag => tag._id);
-  console.log("tags here in catalog slug", tagIds, tagIdsSlug, tagDocuments)
+    // const tagDocuments = await Tags.find({ slug: { $in: tagIds } }).toArray();
+    // console.log("TAG DOCUMENT", tagDocuments);
 
-  query["product.tagIds"] = { $in: tagIdsSlug };
+    // const tagIdsSlug = tagDocuments.map((tag) => tag._id);
+    // console.log("tags here in catalog slug", tagIds, tagIdsSlug, tagDocuments);
+
+    query["product.tagIds"] = { $in: tagIds };
   }
 
   if (searchQuery) {
