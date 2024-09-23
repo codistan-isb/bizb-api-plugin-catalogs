@@ -23,7 +23,15 @@ import xformCatalogSimpleFilters from "../../utils/catalogSimpleFilters.js";
  * @returns {Promise<Object>} A CatalogItemConnection object
  */
 export default async function catalogItems(_, args, context, info) {
-  const { shopIds: opaqueShopIds, tagIds: opaqueTagIds, booleanFilters, simpleFilters, priceRange, searchQuery, ...connectionArgs } = args;
+  const {
+    shopIds: opaqueShopIds,
+    tagIds: opaqueTagIds,
+    booleanFilters,
+    simpleFilters,
+    priceRange,
+    searchQuery,
+    ...connectionArgs
+  } = args;
   // if (simpleFilters[0].name === 'minPrice' && simpleFilters[1].name === 'maxPrice') {
   //   MinPrice = simpleFilters[0].value;
   //   MaxPrice = simpleFilters[1].value;
@@ -33,18 +41,30 @@ export default async function catalogItems(_, args, context, info) {
 
   let catalogBooleanFilters = {};
   if (Array.isArray(booleanFilters) && booleanFilters.length) {
-    catalogBooleanFilters = await xformCatalogBooleanFilters(context, booleanFilters);
+    catalogBooleanFilters = await xformCatalogBooleanFilters(
+      context,
+      booleanFilters
+    );
   }
   let catalogSimpleFilters = {};
   if (Array.isArray(simpleFilters) && simpleFilters.length) {
-    catalogSimpleFilters = await xformCatalogSimpleFilters(context, simpleFilters);
+    catalogSimpleFilters = await xformCatalogSimpleFilters(
+      context,
+      simpleFilters
+    );
   }
   if (connectionArgs.sortBy === "featured") {
     if (!tagIds || tagIds.length === 0) {
-      throw new ReactionError("not-found", "A tag ID is required for featured sort");
+      throw new ReactionError(
+        "not-found",
+        "A tag ID is required for featured sort"
+      );
     }
     if (tagIds.length > 1) {
-      throw new ReactionError("invalid-parameter", "Multiple tags cannot be sorted by featured. Only the first tag will be returned.");
+      throw new ReactionError(
+        "invalid-parameter",
+        "Multiple tags cannot be sorted by featured. Only the first tag will be returned."
+      );
     }
     const tagId = tagIds[0];
 
@@ -55,7 +75,7 @@ export default async function catalogItems(_, args, context, info) {
       searchQuery,
       priceRange,
       shopIds,
-      tagId
+      tagId,
     });
   }
 
@@ -66,15 +86,22 @@ export default async function catalogItems(_, args, context, info) {
 
     // Allow external pricing plugins to handle this if registered. We'll use the
     // first value returned that is a string.
-    for (const func of context.getFunctionsOfType("getMinPriceSortByFieldPath")) {
+    for (const func of context.getFunctionsOfType(
+      "getMinPriceSortByFieldPath"
+    )) {
       realSortByField = await func(context, { connectionArgs }); // eslint-disable-line no-await-in-loop
       if (typeof realSortByField === "string") break;
     }
 
     if (!realSortByField) {
-      Logger.warn("An attempt to sort catalog items by minPrice was rejected. " +
-        "Verify that you have a pricing plugin installed and it registers a getMinPriceSortByFieldPath function.");
-      throw new ReactionError("invalid-parameter", "Sorting by minPrice is not supported");
+      Logger.warn(
+        "An attempt to sort catalog items by minPrice was rejected. " +
+          "Verify that you have a pricing plugin installed and it registers a getMinPriceSortByFieldPath function."
+      );
+      throw new ReactionError(
+        "invalid-parameter",
+        "Sorting by minPrice is not supported"
+      );
     }
 
     connectionArgs.sortBy = realSortByField;
@@ -86,7 +113,7 @@ export default async function catalogItems(_, args, context, info) {
     searchQuery,
     priceRange,
     shopIds,
-    tagIds
+    tagIds,
   });
   //   includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
   //   includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),
@@ -95,6 +122,6 @@ export default async function catalogItems(_, args, context, info) {
   return getPaginatedResponse(query, connectionArgs, {
     includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
     includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),
-    includeTotalCount: wasFieldRequested("totalCount", info)
+    includeTotalCount: wasFieldRequested("totalCount", info),
   });
 }
