@@ -23,7 +23,7 @@ import {
  * @returns {undefined}
  */
 export default async function register(app) {
-  console.log("CATALOG PLUGIN REGISTER ");
+  console.log("CATALOG PLUGIN REGISTER=======");
   await app.registerPlugin({
     label: "Catalogs",
     name: "catalogs",

@@ -8,8 +8,14 @@ function ensureAbsoluteUrls(context, mediaItem) {
   if (!mediaItem || !mediaItem.URLs) return mediaItem;
 
   const URLs = {};
-  Object.keys(mediaItem?.URLs).forEach((name) => {
-    URLs[name] = context.getAbsoluteUrl(mediaItem?.URLs[name]);
+  Object.keys(mediaItem.URLs).forEach((name) => {
+    if (mediaItem?.URLs[name]) {
+      // Ensure the URL is not null or undefined
+      URLs[name] = context.getAbsoluteUrl(mediaItem?.URLs[name]);
+    } else {
+      // If URL is null or undefined, handle it appropriately (log or skip)
+      URLs[name] = null; // Or handle it as per your requirement
+    }
   });
 
   return { ...mediaItem, URLs };
@@ -26,7 +32,12 @@ function ensureAbsoluteUrls(context, mediaItem) {
  * @returns {Object} Transformed media item
  */
 export default async function xformCatalogProductMedia(mediaItem, context) {
-  const xformCatalogProductMediaFuncs = context.getFunctionsOfType("xformCatalogProductMedia");
+  // Handle null mediaItem early
+  if (!mediaItem) return null;
+
+  const xformCatalogProductMediaFuncs = context.getFunctionsOfType(
+    "xformCatalogProductMedia"
+  );
   for (const func of xformCatalogProductMediaFuncs) {
     const xformedMediaItem = await func(mediaItem, context); // eslint-disable-line no-await-in-loop
     if (xformedMediaItem) {
