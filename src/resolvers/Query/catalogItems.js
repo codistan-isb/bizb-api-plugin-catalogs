@@ -96,7 +96,7 @@ export default async function catalogItems(_, args, context, info) {
     if (!realSortByField) {
       Logger.warn(
         "An attempt to sort catalog items by minPrice was rejected. " +
-          "Verify that you have a pricing plugin installed and it registers a getMinPriceSortByFieldPath function."
+        "Verify that you have a pricing plugin installed and it registers a getMinPriceSortByFieldPath function."
       );
       throw new ReactionError(
         "invalid-parameter",
@@ -115,6 +115,7 @@ export default async function catalogItems(_, args, context, info) {
     shopIds,
     tagIds,
   });
+
   //   includeHasNextPage: wasFieldRequested("pageInfo.hasNextPage", info),
   //   includeHasPreviousPage: wasFieldRequested("pageInfo.hasPreviousPage", info),
   //   includeTotalCount: wasFieldRequested("totalCount", info)
