@@ -15,10 +15,11 @@ export default async function globalSearch(_, args, context, info) {
     {
       "$match": {
         "product.isDeleted": false,
-        "product.isVisible": true
+        "product.isVisible": true,
+        "product.isSoldOut": false
       }
     },
-    { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } }, // Include the score
+    { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } },
     {
       $project: {
         _id: "$doc.product._id",
@@ -30,8 +31,8 @@ export default async function globalSearch(_, args, context, info) {
         score: "$score",
       },
     },
-    { $skip: skip }, // Skip the already fetched records
-    { $limit: limit }, // Fetch the next set of results
+    { $skip: skip },
+    { $limit: limit },
   ];
 
   let accountPipeline = [
@@ -44,7 +45,7 @@ export default async function globalSearch(_, args, context, info) {
         },
       },
     },
-    { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } }, // Include the score
+    { $project: { score: { $meta: "searchScore" }, doc: "$$ROOT" } },
     {
       $project: {
         _id: "$doc._id",
@@ -53,8 +54,8 @@ export default async function globalSearch(_, args, context, info) {
         image: "$doc.image",
       },
     },
-    { $skip: skip }, // Skip the already fetched records
-    { $limit: limit }, // Fetch the next set of results
+    { $skip: skip },
+    { $limit: limit },
   ];
 
   let catalog, storeData;
