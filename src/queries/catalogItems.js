@@ -125,14 +125,6 @@ export default async function catalogItems(
     );
   }
 
-  // Fetching inventory items with stock greater than zero
-  // const inventoryIdsWithStock = await SimpleInventory.find({inventoryInStock: { $gt: 0 }  }, {    projection: { "productConfiguration.productId": 1 }  }).toArray();
-
-
-  // const productIds = inventoryIdsWithStock.map(item => item.productConfiguration.productId);
-
-
-
 
   // Building the query for the Catalog
   const query = {
