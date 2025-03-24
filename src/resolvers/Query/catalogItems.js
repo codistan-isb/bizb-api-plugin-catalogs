@@ -27,6 +27,7 @@ export default async function catalogItems(_, args, context, info) {
   const { redis } = context;
   const {
     shopIds: opaqueShopIds,
+    tagNames,
     tagIds: opaqueTagIds,
     booleanFilters,
     simpleFilters,
@@ -119,6 +120,7 @@ export default async function catalogItems(_, args, context, info) {
     searchQuery,
     priceRange,
     shopIds,
+    tagNames,
     tagIds,
   });
 
