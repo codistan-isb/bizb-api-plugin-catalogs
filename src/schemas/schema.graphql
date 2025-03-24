@@ -487,6 +487,8 @@ extend type Query {
     "Optionally provide a list of tag IDs to further filter the item list"
     tagIds: [ID]
 
+    tagNames: [String]
+
     "Additional filters to apply"
     booleanFilters: [CatalogBooleanFilter]
 

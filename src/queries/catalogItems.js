@@ -111,12 +111,15 @@ export default async function catalogItems(
     priceRange,
     shopIds,
     tagIds,
+    tagNames,
     catalogBooleanFilters,
     catalogSimpleFilters,
   } = {}
 ) {
   const { collections } = context;
-  const { Catalog, SimpleInventory } = collections;
+  const { Catalog, SimpleInventory, Tags } = collections;
+
+  // console.log("TAGSNAME", tagNames)
 
   if ((!shopIds || shopIds.length === 0) && (!tagIds || tagIds.length === 0)) {
     throw new ReactionError(
@@ -125,7 +128,14 @@ export default async function catalogItems(
     );
   }
 
+  if (tagNames) {
+    const tags = await Tags.find({
+      name: { $in: tagNames }
+    }).toArray();
 
+    // console.log("tags here in catalog", tags);
+    tagIds = tags.map(tag => tag._id);
+  }
   // Building the query for the Catalog
   const query = {
     // "product._id": { $in: productIds },
