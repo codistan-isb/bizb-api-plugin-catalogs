@@ -130,7 +130,7 @@ export default async function catalogItems(
 
   if (tagNames) {
     const tags = await Tags.find({
-      name: { $in: tagNames }
+      slug: { $in: tagNames }
     }).toArray();
 
     // console.log("tags here in catalog", tags);
